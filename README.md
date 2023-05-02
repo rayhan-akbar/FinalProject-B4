@@ -1,11 +1,11 @@
 # Automatic Waiter Caller for Chef
-##Introduction to the problem and the solution
+## Introduction to the problem and the solution
 ...
-##Hardware design and implementation details
+## Hardware design and implementation details
 ...
-##Software implementation details
+## Software implementation details
 ...
-##Test results and performance evaluation
+## Test results and performance evaluation
 ...
-##Conclusion and future work
+## Conclusion and future work
 ...
