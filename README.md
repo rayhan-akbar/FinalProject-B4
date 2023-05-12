@@ -8,6 +8,7 @@ The system requires the following hardware components:
 3. A buzzer to produce an audible alert for the waiter.
 4. A servo motor to open the separating glass between the kitchen and the waiter area.
 5. A MAX7219 display module to show the status of the food.
+
 The HC SR04 sensors will be connected to an Arduino board, which will process the sensor data. The LED, buzzer, and servo motor will also be connected to the microcontroller to control their operation. The MAX7219 display module will communicate with the microcontroller using SPI to receive instructions for displaying the food status.
 ## Software implementation details
 The software implementation involves programming the microcontroller to perform the following tasks:
