@@ -12,6 +12,7 @@ main:
   SBI   DDRB, 1         ;pin PB1 as o/p (Trigger)
   CBI   DDRB, 0         ;pin PB0 as i/p (Echo)
   SBI   DDRD, 4         ;pin PB4 o/p for servo control
+  CBI   DDRD, 3
   RCALL init_serial ;subroutine untuk inisialisasi serial
   RCALL SPI_INIT
   sei
@@ -136,9 +137,14 @@ dsp:
   CPI R27, 1
   BRSH no
   CPI R27, 0
-  BREQ yes
+  BREQ almost
   RET
 
+almost:
+  SBIC PIND, 3
+  BREQ plate
+  RCALL yes
+  RET
 
 
 no:
@@ -146,54 +152,64 @@ no:
   cbi PORTD, 4
   LDI R30, lo8(message_no) ; Me-load low-byte dari pesan yang diinginkan ke Z
   LDI R31, hi8(message_no) ; Me-load high-byte dari pesan yang diinginkan ke Z
-
-agn_no:
-  LPM R29, Z+ ; Me-load satu char dari strings yang disimpan di program memory Z
-  CPI 29, 0 ; Meng-compare apakah R19 berisi 0
-  BREQ ext_no ; Jika nol, program akan branch ke ext
-  RCALL LCD_buffer
-  STS UDR0, R29 ; Menyimpan char ke  UDR0 yang akan ditampilkan di serial monitor
-  RJMP agn_no ; kembali ke agn sampai R19 bernilai 0
-ext_no:
-  LDI R26,1
+  RCALL agn
+  LDI R26, 1
   LDI   ZL, lo8(rotate_pos_no)
   LDI   ZH, hi8(rotate_pos_no)
-loop_servo_no:
-  LPM   R24, Z+         ;load rotation pos
-  RCALL rotate_servo    ;& rotate servo
-  DEC R26
-  BRNE loop_servo_no
-  RET ; kembali
+  RCALL loop_servo
+  RET
 
-message_no:
-  .ascii "COOKING.." ; Pesan yang diinginkan
-  .byte 0
-
-rotate_pos_no:
-.byte 40,40
+plate:
+  RCALL disp_text_PLATE
+  cbi PORTD, 4
+  LDI R30, lo8(message_plate) ; Me-load low-byte dari pesan yang diinginkan ke Z
+  LDI R31, hi8(message_plate) ; Me-load high-byte dari pesan yang diinginkan ke Z
+  RCALL agn
+  LDI R26, 1
+  LDI   ZL, lo8(rotate_pos_no)
+  LDI   ZH, hi8(rotate_pos_no)
+  RCALL loop_servo
+  RET
 
 yes:
   RCALL disp_text_READY
   sbi PORTD, 4
   LDI R30, lo8(message_yes) ; Me-load low-byte dari pesan yang diinginkan ke Z
   LDI R31, hi8(message_yes) ; Me-load high-byte dari pesan yang diinginkan ke Z
-agn_yes:
-  LPM R19, Z+ ; Me-load satu char dari strings yang disimpan di program memory Z
-  CPI R19, 0 ; Meng-compare apakah R19 berisi 0
-  BREQ ext_yes ; Jika nol, program akan branch ke ext
-  RCALL LCD_buffer
-  STS UDR0, R19 ; Menyimpan char ke  UDR0 yang akan ditampilkan di serial monitor
-  RJMP agn_yes ; kembali ke agn sampai R19 bernilai 0
-ext_yes:
-  LDI R26,1
+  RCALL agn
+  LDI R26, 1
   LDI   ZL, lo8(rotate_pos_yes)
   LDI   ZH, hi8(rotate_pos_yes)
-loop_servo_yes:
+  RCALL loop_servo
+  RET
+
+agn:
+  LPM R29, Z+ ; Me-load satu char dari strings yang disimpan di program memory Z
+  CPI 29, 0 ; Meng-compare apakah R19 berisi 0
+  BREQ ext ; Jika nol, program akan branch ke ext
+  RCALL LCD_buffer
+  STS UDR0, R29 ; Menyimpan char ke  UDR0 yang akan ditampilkan di serial monitor
+  RJMP agn ; kembali ke agn sampai R19 bernilai 0
+ext:
+  RET
+
+loop_servo:
   LPM   R24, Z+         ;load rotation pos
   RCALL rotate_servo    ;& rotate servo
   DEC R26
-  BRNE loop_servo_yes
+  BRNE loop_servo
   RET ; kembali
+
+message_no:
+  .ascii "COOKING.." ; Pesan yang diinginkan
+  .byte 0
+
+message_plate:
+  .ascii "PLATING.." ; Pesan yang diinginkan
+  .byte 0
+
+rotate_pos_no:
+.byte 40,40
 
 message_yes:
   .ascii "READY! " ; Pesan yang diinginkan
@@ -228,6 +244,41 @@ disp_text_COOK:
   ;--------------------------------------------------------
   LDI   R17, 0x05       ;select digit 3
   LDI   R18, 0b00110111       ;data = space
+  RCALL send_bytes      ;send command & data to MAX7219
+  ;--------------------------------------------------------
+  LDI   R17, 0x04       ;select digit 2
+  LDI   R18, 0b00000110       ;data = c
+  RCALL send_bytes      ;send command & data to MAX7219
+  ;--------------------------------------------------------
+  LDI   R17, 0x03       ;select digit 1
+  LDI   R18, 0b01110110       ;data = n
+  RCALL send_bytes      ;send command & data to MAX7219
+  ;--------------------------------------------------------
+    LDI   R17, 0x02       ;select digit 0
+  LDI   R18, 0b01111011      ;data = t
+  RCALL send_bytes      ;send command & data to MAX7219
+  ;--------------------------------------------------------
+  LDI   R17, 0x01       ;select digit 0
+  LDI   R18, 0x00       ;data = t
+  RCALL send_bytes      ;send command & data to MAX7219
+  ;--------------------------------------------------------
+  RET
+
+disp_text_PLATE:
+  LDI   R17, 0x08       ;select digit 7
+  LDI   R18, 0b01100111       ;data = d
+  RCALL send_bytes      ;send command & data to MAX7219
+  ;--------------------------------------------------------
+  LDI   R17, 0x07       ;select digit 6
+  LDI   R18, 0b00001110      ;data = space
+  RCALL send_bytes      ;send command & data to MAX7219
+  ;--------------------------------------------------------
+  LDI   R17, 0x06       ;select digit 6
+  LDI   R18, 0b01111101      ;data = space
+  RCALL send_bytes      ;send command & data to MAX7219
+  ;--------------------------------------------------------
+  LDI   R17, 0x05       ;select digit 3
+  LDI   R18, 0b00001111       ;data = space
   RCALL send_bytes      ;send command & data to MAX7219
   ;--------------------------------------------------------
   LDI   R17, 0x04       ;select digit 2
