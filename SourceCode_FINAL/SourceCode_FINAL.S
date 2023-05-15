@@ -137,13 +137,13 @@ dsp:
   CPI R27, 1
   BRSH no   ;Jika jarak lebih dari 10 cm, branch ke no
   CPI R27, 0
-  BREQ almost ;Jika jarak kurang dari 10 cm, branch ke almost
+  BREQ ready ;Jika jarak kurang dari 10 cm, branch ke almost
   RET
 
-almost:
+ready:
   SBIC PIND, 3 ;Membaca sensor magnet
-  BREQ plate  ; Jika belum terdeteksi, maka plating
-  RCALL yes   ; Jika sudah, maka branch ke yes (ready)
+  BREQ yes  ; Jika belum terdeteksi, maka plating
+  RCALL opened   ; Jika sudah, maka branch ke yes (ready)
   RET
 
 
@@ -161,7 +161,7 @@ no:
   RCALL loop_servo ;Subroutine untuk memutar servo
   RET
 
-plate:
+opened:
   RCALL disp_text_PLATE ;Menampilkan pesan 'PLATING' di MAX7219
   cbi PORTD, 4 ;Mematikan LED
   cbi PORTD, 5 ;Mematikan Buzzer
@@ -170,9 +170,10 @@ plate:
   LDI R31, hi8(message_plate) ; Me-load high-byte dari pesan yang diinginkan ke Z
   RCALL agn
   LDI R26, 1
-  LDI   ZL, lo8(rotate_pos_no);Berisi derajat dari perputaran servo
-  LDI   ZH, hi8(rotate_pos_no)
+  LDI   ZL, lo8(rotate_pos_yes);Berisi derajat dari perputaran servo
+  LDI   ZH, hi8(rotate_pos_yes)
   RCALL loop_servo
+  RCALL delay_second
   RET
 
 yes:
@@ -184,8 +185,8 @@ yes:
   LDI R31, hi8(message_yes) ; Me-load high-byte dari pesan yang diinginkan ke Z
   RCALL agn
   LDI R26, 1
-  LDI   ZL, lo8(rotate_pos_yes)
-  LDI   ZH, hi8(rotate_pos_yes)
+  LDI   ZL, lo8(rotate_pos_no)
+  LDI   ZH, hi8(rotate_pos_no)
   RCALL loop_servo
   RET
 
@@ -272,31 +273,31 @@ disp_text_COOK:
 
 disp_text_PLATE:
   LDI   R17, 0x08       ;select digit 7
-  LDI   R18, 0b01100111       ;data = P
+  LDI   R18, 0b01111110       ;data = P
   RCALL send_bytes      ;send command & data to MAX7219
   ;--------------------------------------------------------
   LDI   R17, 0x07       ;select digit 6
-  LDI   R18, 0b00001110      ;data = L
+  LDI   R18, 0b01100111      ;data = L
   RCALL send_bytes      ;send command & data to MAX7219
   ;--------------------------------------------------------
   LDI   R17, 0x06       ;select digit 5
-  LDI   R18, 0b01111101      ;data = A
+  LDI   R18, 0b01101111      ;data = A
   RCALL send_bytes      ;send command & data to MAX7219
   ;--------------------------------------------------------
   LDI   R17, 0x05       ;select digit 4
-  LDI   R18, 0b00001111       ;data = T
+  LDI   R18, 0b01110110       ;data = T
   RCALL send_bytes      ;send command & data to MAX7219
   ;--------------------------------------------------------
   LDI   R17, 0x04       ;select digit 3
-  LDI   R18, 0b00000110       ;data = I
+  LDI   R18, 0b01101111       ;data = I
   RCALL send_bytes      ;send command & data to MAX7219
   ;--------------------------------------------------------
   LDI   R17, 0x03       ;select digit 2
-  LDI   R18, 0b01110110       ;data = N
+  LDI   R18, 0b00111101       ;data = N
   RCALL send_bytes      ;send command & data to MAX7219
   ;--------------------------------------------------------
     LDI   R17, 0x02       ;select digit 1
-  LDI   R18, 0b01111011      ;data = G
+  LDI   R18, 0b0      ;data = G
   RCALL send_bytes      ;send command & data to MAX7219
   ;--------------------------------------------------------
   LDI   R17, 0x01       ;select digit 0
@@ -413,6 +414,27 @@ innerLoop:
   brne outerLoop; Jika hasil pengurangan baris sebelumnya tidak menghasilkan nol,
 ; maka outerLoop akan terus diulang dan innerLoop akan dijalankan kembali
 RET
+
+delay_second:
+;--------
+ldi r25, hi8(2000) ; Memasukkan nilai delay dalam satuan ms ke r25
+  ldi r24, lo8(2000) ; Memasukkan nilai delay dalam satuan ms ke r24
+outerLoop_second:
+; karena innerLoop berjalan selama 4 cycle, maka di-loop 4000x sehingga menghasilkan
+; 1 millisecond (4 x 4000 : 16Mhz = 10^-3)
+  ldi r31, hi8(4000) ; mengisi r30 dan r31 dengan 4000
+  ldi r30, lo8(4000)
+innerLoop_second:
+  sbiw r30,1 ; Mengurangi isi r30 dan r31 sebanyak 1
+  brne innerLoop ; Jika hasil pengurangan baris sebelumnya tidak menghasilkan nol,
+; innerLoop akan terus diulang
+;------------------------------(end of innerLoop)
+  
+  sbiw r24, 1 ; Mengurangi r24 dan r25 sebanyak 1
+  brne outerLoop; Jika hasil pengurangan baris sebelumnya tidak menghasilkan nol,
+; maka outerLoop akan terus diulang dan innerLoop akan dijalankan kembali
+RET
+
 
 LCD_buffer:
   LDS R17, UCSR0A
