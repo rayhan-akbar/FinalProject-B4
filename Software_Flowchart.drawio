@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-05-15T05:44:28.619Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36" etag="m_YTjfk9IdjtjxI_ecOy" version="21.2.9" type="device">
+<mxfile host="app.diagrams.net" modified="2023-05-15T07:13:19.686Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36" etag="nZDFCZ70YOnry8uC9viY" version="21.2.9" type="device">
   <diagram name="Page-1" id="D8Vl_URc9-n9CDZ59L-_">
     <mxGraphModel dx="1270" dy="539" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -99,15 +99,17 @@
         <mxCell id="vrvisQrk9lShXyxaP80K-29" value="Display READY,&lt;br&gt;Turn on green LED&lt;br&gt;&amp;nbsp;and turn on Buzzer, &lt;br&gt;and set servo&lt;br&gt;to 40 degree" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#A9C4EB;" vertex="1" parent="1">
           <mxGeometry x="414" y="520" width="162.5" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="vrvisQrk9lShXyxaP80K-36" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="vrvisQrk9lShXyxaP80K-32" target="vrvisQrk9lShXyxaP80K-7">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="687" y="445" />
-            </Array>
-          </mxGeometry>
+        <mxCell id="vrvisQrk9lShXyxaP80K-42" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="vrvisQrk9lShXyxaP80K-32" target="vrvisQrk9lShXyxaP80K-41">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="vrvisQrk9lShXyxaP80K-32" value="Display OPENED,&lt;br&gt;Turn on green LED&lt;br&gt;&amp;nbsp;and turn on Buzzer, &lt;br&gt;and set servo&lt;br&gt;to 130 degree" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#A9C4EB;" vertex="1" parent="1">
           <mxGeometry x="605.25" y="520" width="162.5" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="vrvisQrk9lShXyxaP80K-43" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="vrvisQrk9lShXyxaP80K-41" target="vrvisQrk9lShXyxaP80K-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="vrvisQrk9lShXyxaP80K-41" value="Delay for 2 seconds" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#A9C4EB;" vertex="1" parent="1">
+          <mxGeometry x="530" y="415" width="120" height="60" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
