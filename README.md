@@ -16,7 +16,7 @@ The software implementation involves configuring the appropriate pins for sensor
 
 ## Test results and performance evaluation
 
-To evaluate the system's performance and validate its functionality, rigorous testing was conducted using various scenarios. The following tests were performed:
+To evaluate the system's performance and validate its functionality, testing was conducted using various scenarios. The following tests were performed:
 
 1. Food Detection Test: The HC SR04 sensor accurately detected the presence of food in real-time. The system consistently recognized the food's availability and initiated the appropriate actions.
 
