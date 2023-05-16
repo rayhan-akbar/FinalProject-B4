@@ -5,6 +5,7 @@
 .equ  SCK, 5
 .equ  MOSI, 3
 .equ  SS, 2
+
 main:
   LDI R17, (1<<MOSI)|(1<<SCK)|(1<<SS)
   OUT DDRB, R17   ;set MOSI, SCK, SS as o/p
