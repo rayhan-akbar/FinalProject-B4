@@ -8,6 +8,8 @@ In the restaurant industry, efficient communication between chefs and waiters is
 The hardware design of the Automatic Waiter Caller for Chef system involves several components. The HC SR04 sensor is positioned near the food, detecting its presence and readiness. A Hall effect sensor is placed on the waiter's side, allowing them to trigger the system. The system incorporates a servo mechanism to control the opening and closing of a separating glass. An LED and a buzzer are used to provide visual and audible cues to the waiter. Additionally, a MAX7219 display is included to show the status of the food, such as "Cooking," "Ready," or "Opened."
 
 To implement the hardware design, the HC SR04 sensor is connected to the appropriate Arduino pins, and the Hall effect sensor is similarly connected. The LED and buzzer are connected to output pins to enable visual and auditory notifications. The servo is connected to the Arduino board to control the opening and closing of the separating glass. The MAX7219 display is connected to the Arduino, and the necessary communication protocol is established.
+The schematic for the hardware as such:
+![Hardware_Schematic](Documentation/Hardware_Schematic.png)
 
 ## Software implementation details
 
@@ -30,9 +32,13 @@ To evaluate the system's performance and validate its functionality, testing was
 5. MAX7219 Display Test: The MAX7219 display accurately presented the food's status, displaying "Cooking," "Ready," or "Opened" as expected. The display provided clear and concise information, aiding the waiter in managing food service effectively.
 
 The test results demonstrated that the system consistently performed as intended, successfully notifying the waiter when the food was ready and facilitating timely service. The system performed reliably, ensuring efficient communication between the kitchen and the waiter, resulting in improved food service and customer satisfaction.
+The System's complete circuit as such:
+![Complete_Circuit](Documentation/Hardware_Physical.jpg)
 
 ## Conclusion and future work
 
 In conclusion, the Automatic Waiter Caller for Chef system has proven to be a valuable solution for enhancing communication between chefs and waiters in a restaurant setting. By incorporating sensors, LED indicators, and a servo motor, the system ensures efficient coordination and prompt serving of food. The successful implementation of the system demonstrates its potential to streamline restaurant operations and improve customer satisfaction.
 
 Future work for the Automatic Waiter Caller for Chef system could involve further optimization and refinement of the hardware and software components. This includes exploring additional features such as integrating wireless communication between the chef and waiter, implementing machine learning algorithms to predict food readiness, or incorporating a user-friendly interface for easy configuration. These enhancements would further elevate the system's capabilities and contribute to the advancement of restaurant automation technology.
+
+You can read our project report [here](Documentation/CS_MH_SSF10_B4.pdf)
