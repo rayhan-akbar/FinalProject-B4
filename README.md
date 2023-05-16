@@ -13,7 +13,7 @@ To implement the hardware design, the HC SR04 sensor is connected to the appropr
 
 The software implementation of the Automatic Waiter Caller for Chef system involves coding the necessary functionalities. A microcontroller is programmed to process the input from the HC SR04 sensor, triggering the appropriate output signals. When the food is detected, the LED illuminates, and the buzzer sounds to call the waiter. The microcontroller also handles the interaction with the Hall effect sensor, initiating the opening of the separating glass using the servo mechanism. A delay is implemented to provide the waiter sufficient time to reach the food before the glass opens. The MAX7219 display is controlled by the microcontroller to show relevant food status information.
 The flowchart for the software as such:
-![Software_Flowcart](Software_Flowchart.png)
+![Software_Flowcart](Documentation/Software_Flowchart.png)
 
 ## Test results and performance evaluation
 
